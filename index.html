@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costing Validation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dark-mode.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <img src="M88LOGO.png" alt="Madison88 Logo" class="logo">
+            <h1 class="header-title">Costing Validation</h1>
+            <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div class="upload-section">
+            <div class="drop-zone" id="leftDropZone">
+                <div class="drop-zone-content">
+                    <p class="drag-text">Drag & Drop Files Here</p>
+                    <p class="drag-subtext">or click to browse</p>
+                    <p>OB Excel File/s</p>
+                    <p class="cell-info">Multiple Files Supported</p>
+                    <input type="file" id="leftFileInput" accept=".xlsx,.xls" multiple hidden>
+                    <button class="browse-btn" onclick="document.getElementById('leftFileInput').click()">Browse
+                        Files</button>
+                </div>
+                <div class="file-list" id="leftFileList"></div>
+            </div>
+
+            <div class="drop-zone" id="rightDropZone">
+                <div class="drop-zone-content">
+                    <p class="drag-text">Drag & Drop Files Here</p>
+                    <p class="drag-subtext">or click to browse</p>
+                    <p>Buyer CBD File/s</p>
+                    <p class="cell-info">Multiple Files Supported</p>
+                    <input type="file" id="rightFileInput" accept=".xlsx,.xls" multiple hidden>
+                    <button class="browse-btn" onclick="document.getElementById('rightFileInput').click()">Browse
+                        Files</button>
+                </div>
+                <div class="file-list" id="rightFileList"></div>
+            </div>
+        </div>
+
+        <div class="button-section">
+            <button id="generateBtn" class="generate-btn">Generate Results</button>
+        </div>
+
+        <div class="results-section">
+            <h2>Results</h2>
+            <div id="resultsTable"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

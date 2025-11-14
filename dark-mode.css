@@ -1,0 +1,172 @@
+/* Dark Mode Styles */
+body.dark-mode {
+    background: #1a1f2e;
+    transition: background 0.3s ease;
+}
+
+body.dark-mode .header {
+    background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .container {
+    background: #242b3d;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
+    color: #d6e0ea;
+}
+
+body.dark-mode .drop-zone {
+    background: #2d3548;
+    border-color: #3d4a5f;
+}
+
+body.dark-mode .drop-zone:hover {
+    background: #353d52;
+    border-color: #4a5a75;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .drop-zone.dragover {
+    background: #353d52;
+    border-color: #4a5a75;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .drop-zone-content p {
+    color: #d6e0ea;
+}
+
+body.dark-mode .drop-zone-content .drag-text {
+    color: #d6e0ea;
+}
+
+body.dark-mode .drop-zone-content .drag-subtext {
+    color: #849bba;
+}
+
+body.dark-mode .drop-zone-content .upload-icon {
+    opacity: 0.8;
+}
+
+body.dark-mode .cell-info {
+    background: #353d52;
+    color: #d6e0ea;
+}
+
+body.dark-mode .file-item {
+    background: #353d52;
+    border-color: #3d4a5f;
+}
+
+body.dark-mode .file-item-name {
+    color: #d6e0ea;
+}
+
+body.dark-mode .browse-btn {
+    background: #3d4a5f;
+}
+
+body.dark-mode .browse-btn:hover {
+    background: #4a5a75;
+}
+
+body.dark-mode .generate-btn {
+    background: linear-gradient(135deg, #2d3548 0%, #3d4a5f 100%);
+}
+
+body.dark-mode .results-section {
+    border-top-color: #3d4a5f;
+}
+
+body.dark-mode .results-table {
+    background: #2d3548;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .results-table thead {
+    background: linear-gradient(135deg, #1a1f2e 0%, #242b3d 100%);
+}
+
+body.dark-mode .results-table td {
+    border-bottom-color: #3d4a5f;
+    color: #d6e0ea;
+}
+
+body.dark-mode .results-table tbody tr:hover {
+    background: #353d52;
+}
+
+body.dark-mode .match-details {
+    color: #849bba;
+}
+
+body.dark-mode .match-found {
+    background: #064e3b;
+    color: #6ee7b7;
+}
+
+body.dark-mode .match-not-found {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+/* Dark mode: Make inline green/red text more visible in table cells */
+body.dark-mode .results-table td span[style*="color: #065f46"] {
+    color: #6ee7b7 !important;
+    background: rgba(6, 78, 59, 0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+body.dark-mode .results-table td span[style*="color: #991b1b"] {
+    color: #fca5a5 !important;
+    background: rgba(127, 29, 29, 0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+body.dark-mode .no-results {
+    color: #849bba;
+}
+
+body.dark-mode .loading-text {
+    color: #d6e0ea;
+}
+
+body.dark-mode .loader {
+    background: #2d3548;
+}
+
+body.dark-mode .loader:before,
+body.dark-mode .loader:after {
+    background: #d6e0ea;
+}
+
+body.dark-mode .file-list::-webkit-scrollbar-track,
+body.dark-mode textarea::-webkit-scrollbar-track {
+    background: #353d52;
+}
+
+body.dark-mode .file-list::-webkit-scrollbar-thumb,
+body.dark-mode textarea::-webkit-scrollbar-thumb {
+    background: #4a5a75;
+}
+
+body.dark-mode textarea::-webkit-scrollbar-thumb:hover {
+    background: #5a6a85;
+}
+
+body.dark-mode textarea {
+    background: #2d3548;
+    border-color: #3d4a5f;
+    color: #d6e0ea;
+}
+
+body.dark-mode textarea::placeholder {
+    color: #849bba;
+}
