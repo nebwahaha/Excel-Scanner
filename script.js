@@ -241,20 +241,83 @@ function displayResultsTable(results) {
 
     // Build table - only show "NOT FOUND" for products that weren't found anywhere
     let tableHTML = `
-        <table class="results-table">
+        <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; gap: 20px; position: relative;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; right: 180px; display: flex; align-items: center;">
+                <div class="search-container">
+                    <div class="search-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="searchInput" class="search-input-expandable" placeholder="Search OB Files, Buyer CBD Files..." onkeyup="searchTable()">
+                </div>
+            </div>
+            <div style="margin-left: auto; z-index: 1;">
+                <button onclick="clearAllFilters()" class="clear-filters-btn">Clear All Filters</button>
+            </div>
+        </div>
+        <table class="results-table" id="mainResultsTable">
             <thead>
-                <tr>
+                <tr class="header-labels-row">
                     <th>OB File/s</th>
                     <th>Buyer CBD File/s</th>
-                    <th>Match Status</th>
+                    <th>Match Status with excel</th>
                     <th>Standard Minute Value</th>
                     <th>Average Efficiency %</th>
                     <th>Hourly Wages with Fringes</th>
                     <th>Overhead Cost Ratio to Direct Labor</th>
                     <th>Factory Profit %</th>
                 </tr>
+                <tr class="filter-row">
+                    <th></th>
+                    <th></th>
+                    <th>
+                        <select class="column-filter" data-column="match-status" onchange="filterTable()">
+                            <option value="all">All</option>
+                            <option value="found">Found</option>
+                            <option value="notfound">Not Found</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select class="column-filter" data-column="smv" onchange="filterTable()">
+                            <option value="all">All</option>
+                            <option value="exact">Exact Match</option>
+                            <option value="close">Close Match</option>
+                            <option value="mismatch">Mismatch</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select class="column-filter" data-column="efficiency" onchange="filterTable()">
+                            <option value="all">All</option>
+                            <option value="valid">Valid</option>
+                            <option value="invalid">Invalid</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select class="column-filter" data-column="wages" onchange="filterTable()">
+                            <option value="all">All</option>
+                            <option value="valid">Valid</option>
+                            <option value="invalid">Invalid</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select class="column-filter" data-column="overhead" onchange="filterTable()">
+                            <option value="all">All</option>
+                            <option value="valid">Valid</option>
+                            <option value="invalid">Invalid</option>
+                        </select>
+                    </th>
+                    <th>
+                        <select class="column-filter" data-column="profit" onchange="filterTable()">
+                            <option value="all">All</option>
+                            <option value="valid">Valid</option>
+                            <option value="invalid">Invalid</option>
+                        </select>
+                    </th>
+                </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
     `;
 
     // First, show all FOUND results
@@ -339,24 +402,80 @@ function displayResultsTable(results) {
                     const truncatedProduct = truncateToThreeDecimals(productSMV);
                     const truncatedTNF = truncateToThreeDecimals(tnfSMV);
 
-                    const isMatch = Math.abs(truncatedProduct - truncatedTNF) < 0.001;
-                    const color = isMatch ? '#065f46' : '#991b1b';
                     const difference = truncateToThreeDecimals(truncatedProduct - truncatedTNF);
-                    const diffSign = difference > 0 ? '+' : '';
+                    const absDifference = Math.abs(difference);
 
+                    // Determine color based on difference magnitude
+                    let color;
+                    if (absDifference < 0.001) {
+                        // Perfect match or negligible difference - green
+                        color = '#065f46';
+                    } else if (absDifference <= 0.01) {
+                        // Minimal difference (0.001 to 0.01) - yellow/amber
+                        color = '#d97706';
+                    } else {
+                        // Significant difference - red
+                        color = '#991b1b';
+                    }
+
+                    const diffSign = difference > 0 ? '+' : '';
                     const formattedProduct = formatThreeDecimals(productSMV);
                     const formattedTNF = formatThreeDecimals(tnfSMV);
                     const formattedDiff = formatThreeDecimals(Math.abs(difference));
 
-                    if (isMatch) {
+                    if (absDifference < 0.001) {
                         return `<span style="color: ${color}; font-weight: 600;">${formattedProduct}</span>`;
                     } else {
                         return `<span style="color: ${color}; font-weight: 600;">Product: ${formattedProduct}</span><br><span style="font-size: 0.85em; color: #849bba;">OB Total SMV: ${formattedTNF} (${diffSign}${formattedDiff})</span>`;
                     }
                 };
 
+                // Determine SMV status for filtering
+                let smvStatus = 'exact';
+                if (result.cellValues.standardMinuteValue !== null && location.smv !== null) {
+                    const truncateToThreeDecimals = (num) => Math.floor(num * 1000) / 1000;
+                    const truncatedProduct = truncateToThreeDecimals(result.cellValues.standardMinuteValue);
+                    const truncatedTNF = truncateToThreeDecimals(location.smv);
+                    const absDifference = Math.abs(truncatedProduct - truncatedTNF);
+
+                    if (absDifference < 0.001) {
+                        smvStatus = 'exact';
+                    } else if (absDifference <= 0.01) {
+                        smvStatus = 'close';
+                    } else {
+                        smvStatus = 'mismatch';
+                    }
+                }
+
+                // Determine validity status for other fields
+                // Helper function to normalize percentage values
+                const normalizePercentage = (value) => {
+                    if (value === null || value === undefined) return null;
+                    // If value is less than 1, it's stored as decimal (0.5 = 50%)
+                    if (value < 1) {
+                        return value * 100;
+                    }
+                    return value;
+                };
+
+                const normalizedEfficiency = normalizePercentage(result.cellValues.averageEfficiency);
+                const efficiencyStatus = normalizedEfficiency !== null &&
+                    Math.abs(normalizedEfficiency - 50) < 0.1 ? 'valid' : 'invalid';
+
+                const wagesStatus = result.cellValues.hourlyWages !== null &&
+                    Math.abs(result.cellValues.hourlyWages - 1.750) < 0.01 ? 'valid' : 'invalid';
+
+                const normalizedOverhead = normalizePercentage(result.cellValues.overheadCost);
+                const overheadStatus = normalizedOverhead !== null &&
+                    Math.abs(normalizedOverhead - 70) < 0.1 ? 'valid' : 'invalid';
+
+                const normalizedProfit = normalizePercentage(result.cellValues.factoryProfit);
+                const profitStatus = normalizedProfit !== null &&
+                    Math.abs(normalizedProfit - 10) < 0.1 ? 'valid' : 'invalid';
+
                 tableHTML += `
-                    <tr>
+                    <tr data-match-status="found" data-smv="${smvStatus}" data-efficiency="${efficiencyStatus}" 
+                        data-wages="${wagesStatus}" data-overhead="${overheadStatus}" data-profit="${profitStatus}">
                         <td>
                             <strong>${result.tnfFileName}</strong>
                             <div class="match-details">Sheet: ${location.sheet}</div>
@@ -388,7 +507,8 @@ function displayResultsTable(results) {
             if (!notFoundProducts.has(result.productID)) {
                 notFoundProducts.add(result.productID);
                 tableHTML += `
-                    <tr>
+                    <tr data-match-status="notfound" data-smv="all" data-efficiency="all" 
+                        data-wages="all" data-overhead="all" data-profit="all">
                         <td>
                             <em>Searched in all files</em>
                         </td>
@@ -673,6 +793,105 @@ async function searchProductInWorkbook(file, productID) {
 
         reader.readAsArrayBuffer(file);
     });
+}
+
+// Search table function
+function searchTable() {
+    const input = document.getElementById('searchInput');
+    if (!input) return;
+
+    const filter = input.value.toLowerCase();
+    const table = document.getElementById('mainResultsTable');
+    if (!table) return;
+
+    const tbody = document.getElementById('tableBody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        // Get text from first two columns (OB File and Buyer CBD File)
+        const cells = row.getElementsByTagName('td');
+        if (cells.length >= 2) {
+            const obFile = cells[0].textContent || cells[0].innerText;
+            const buyerFile = cells[1].textContent || cells[1].innerText;
+            const searchText = (obFile + ' ' + buyerFile).toLowerCase();
+
+            if (searchText.indexOf(filter) > -1) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+}
+
+// Clear all filters
+function clearAllFilters() {
+    // Clear search input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        searchTable(); // Reset search
+    }
+
+    // Clear all filter dropdowns
+    document.querySelectorAll('.column-filter').forEach(select => {
+        select.value = 'all';
+    });
+    filterTable();
+}
+
+// Filter table based on dropdown selections
+function filterTable() {
+    const table = document.getElementById('mainResultsTable');
+    if (!table) return;
+
+    const tbody = document.getElementById('tableBody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    // Get all filter values
+    const filters = {};
+    document.querySelectorAll('.column-filter').forEach(select => {
+        const column = select.getAttribute('data-column');
+        filters[column] = select.value;
+    });
+
+    console.log('Active filters:', filters);
+
+    // Filter rows
+    let visibleCount = 0;
+    for (let row of rows) {
+        let shouldShow = true;
+
+        // Check each filter
+        for (let [column, filterValue] of Object.entries(filters)) {
+            if (filterValue === 'all') continue;
+
+            const rowValue = row.getAttribute(`data-${column}`);
+
+            console.log(`Checking ${column}: filter="${filterValue}", row="${rowValue}"`);
+
+            // Check if row value matches filter
+            if (rowValue !== filterValue) {
+                // Special case: "not found" rows have "all" for non-match-status columns
+                if (rowValue === 'all' && column !== 'matchStatus') {
+                    // Skip this filter for "not found" rows on non-match-status columns
+                    continue;
+                }
+                shouldShow = false;
+                break;
+            }
+        }
+
+        // Show or hide row
+        if (shouldShow) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    }
+
+    console.log(`Showing ${visibleCount} of ${rows.length} rows`);
 }
 
 // Dark Mode Toggle
