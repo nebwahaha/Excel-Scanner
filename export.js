@@ -91,10 +91,10 @@ async function exportToPDF() {
                 // Color code the Match Status column (index 2)
                 if (data.column.index === 2 && data.section === 'body') {
                     const cellText = data.cell.text[0];
-                    if (cellText && cellText.includes('FOUND')) {
+                    if (cellText && cellText.includes('✓ FOUND')) {
                         data.cell.styles.textColor = [6, 95, 70]; // Green
                         data.cell.styles.fontStyle = 'bold';
-                    } else if (cellText && cellText.includes('NOT FOUND')) {
+                    } else if (cellText && cellText.includes('✗ NOT FOUND')) {
                         data.cell.styles.textColor = [153, 27, 27]; // Red
                         data.cell.styles.fontStyle = 'bold';
                     }
