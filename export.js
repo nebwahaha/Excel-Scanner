@@ -130,8 +130,11 @@ async function exportToPDF() {
                         // Empty cell - color it red
                         data.cell.styles.textColor = [153, 27, 27]; // Red
                         data.cell.styles.fontStyle = 'bold';
+                    } else if (cellText && cellText !== '-' && !cellText.includes('Product:')) {
+                        // If it's just a number without "Product:" prefix, it's a match - color it green
+                        data.cell.styles.textColor = [6, 95, 70]; // Green
+                        data.cell.styles.fontStyle = 'bold';
                     }
-                    // If it's just a number without "Product:" prefix, it's a match - leave it default color
                 }
 
                 // Color code the Average Efficiency % column (index 4)
@@ -149,6 +152,10 @@ async function exportToPDF() {
                             // Check if it's not 50.0% (with small tolerance)
                             if (Math.abs(value - 50.0) >= 0.1) {
                                 data.cell.styles.textColor = [217, 119, 6]; // Orange
+                                data.cell.styles.fontStyle = 'bold';
+                            } else {
+                                // Correct value - green
+                                data.cell.styles.textColor = [6, 95, 70]; // Green
                                 data.cell.styles.fontStyle = 'bold';
                             }
                         }
@@ -171,6 +178,10 @@ async function exportToPDF() {
                             if (Math.abs(value - 1.750) >= 0.01) {
                                 data.cell.styles.textColor = [217, 119, 6]; // Orange
                                 data.cell.styles.fontStyle = 'bold';
+                            } else {
+                                // Correct value - green
+                                data.cell.styles.textColor = [6, 95, 70]; // Green
+                                data.cell.styles.fontStyle = 'bold';
                             }
                         }
                     }
@@ -192,6 +203,10 @@ async function exportToPDF() {
                             if (Math.abs(value - 70.0) >= 0.1) {
                                 data.cell.styles.textColor = [217, 119, 6]; // Orange
                                 data.cell.styles.fontStyle = 'bold';
+                            } else {
+                                // Correct value - green
+                                data.cell.styles.textColor = [6, 95, 70]; // Green
+                                data.cell.styles.fontStyle = 'bold';
                             }
                         }
                     }
@@ -212,6 +227,10 @@ async function exportToPDF() {
                             // Check if it's not 10.0% (with small tolerance)
                             if (Math.abs(value - 10.0) >= 0.1) {
                                 data.cell.styles.textColor = [217, 119, 6]; // Orange
+                                data.cell.styles.fontStyle = 'bold';
+                            } else {
+                                // Correct value - green
+                                data.cell.styles.textColor = [6, 95, 70]; // Green
                                 data.cell.styles.fontStyle = 'bold';
                             }
                         }
