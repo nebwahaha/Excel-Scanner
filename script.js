@@ -242,7 +242,7 @@ function displayResultsTable(results) {
     // Build table - only show "NOT FOUND" for products that weren't found anywhere
     let tableHTML = `
         <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; gap: 20px; position: relative;">
-            <div style="position: absolute; left: 0; top: 0; bottom: 0; right: 180px; display: flex; align-items: center;">
+            <div style="position: absolute; left: 0; top: 0; bottom: 0; right: 300px; display: flex; align-items: center;">
                 <div class="search-container">
                     <div class="search-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -253,8 +253,9 @@ function displayResultsTable(results) {
                     <input type="text" id="searchInput" class="search-input-expandable" placeholder="Search OB Files, Buyer CBD Files..." onkeyup="searchTable()">
                 </div>
             </div>
-            <div style="margin-left: auto; z-index: 1;">
+            <div style="margin-left: auto; z-index: 1; display: flex; gap: 10px;">
                 <button onclick="clearAllFilters()" class="clear-filters-btn">Clear All Filters</button>
+                <button onclick="exportResults()" class="export-btn">Export</button>
             </div>
         </div>
         <table class="results-table" id="mainResultsTable">

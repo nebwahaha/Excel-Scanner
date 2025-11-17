@@ -609,6 +609,34 @@ textarea::-webkit-scrollbar-thumb:hover {
     transform: translateY(0);
 }
 
+/* Export Button */
+.export-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fbfffd;
+    border: none;
+    padding: 13px 24px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    white-space: nowrap;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.export-btn:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.export-btn:active {
+    transform: translateY(0);
+}
+
 .results-table td {
     padding: 16px 20px;
     border-bottom: 1px solid #d6e0ea;

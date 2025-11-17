@@ -209,6 +209,18 @@ body.dark-mode .clear-filters-btn:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* Export Button Dark Mode */
+body.dark-mode .export-btn {
+    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    color: #d6e0ea;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .export-btn:hover {
+    background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
 /* Summary Box Dark Mode */
 body.dark-mode div[style*="background: #f0f7ff"] {
     background: #2d3548 !important;
