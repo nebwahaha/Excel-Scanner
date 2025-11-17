@@ -91,10 +91,10 @@ async function exportToPDF() {
                 // Color code the Match Status column (index 2)
                 if (data.column.index === 2 && data.section === 'body') {
                     const cellText = data.cell.text[0];
-                    if (cellText && cellText.includes('✓ FOUND')) {
+                    if (cellText && cellText.includes('FOUND')) {
                         data.cell.styles.textColor = [6, 95, 70]; // Green
                         data.cell.styles.fontStyle = 'bold';
-                    } else if (cellText && cellText.includes('✗ NOT FOUND')) {
+                    } else if (cellText && cellText.includes('NOT FOUND')) {
                         data.cell.styles.textColor = [153, 27, 27]; // Red
                         data.cell.styles.fontStyle = 'bold';
                     }
@@ -108,10 +108,10 @@ async function exportToPDF() {
                         // Extract the difference value to determine color
                         // Format is like: "Product: 1.234 OB Total SMV: 1.230 (+0.004)" or "(-0.004)"
                         const diffMatch = cellText.match(/\([\+\-]([\d.]+)\)/);
-                        
+
                         if (diffMatch) {
                             const difference = parseFloat(diffMatch[1]);
-                            
+
                             // Apply color based on difference magnitude (same logic as website)
                             if (difference <= 0.01) {
                                 // Small difference (0.001 to 0.01) - orange
@@ -130,11 +130,8 @@ async function exportToPDF() {
                         // Empty cell - color it red
                         data.cell.styles.textColor = [153, 27, 27]; // Red
                         data.cell.styles.fontStyle = 'bold';
-                    } else if (cellText && cellText !== '-' && !cellText.includes('Product:')) {
-                        // If it's just a number without "Product:" prefix, it's a match - make it green
-                        data.cell.styles.textColor = [6, 95, 70]; // Green
-                        data.cell.styles.fontStyle = 'bold';
                     }
+                    // If it's just a number without "Product:" prefix, it's a match - leave it default color
                 }
 
                 // Color code the Average Efficiency % column (index 4)
@@ -149,12 +146,9 @@ async function exportToPDF() {
                         const match = cellText.match(/([\d.]+)%/);
                         if (match) {
                             const value = parseFloat(match[1]);
-                            // Check if it matches 50.0% (with small tolerance)
-                            if (Math.abs(value - 50.0) < 0.1) {
-                                data.cell.styles.textColor = [6, 95, 70]; // Green - correct value
-                                data.cell.styles.fontStyle = 'bold';
-                            } else {
-                                data.cell.styles.textColor = [153, 27, 27]; // Red - incorrect value
+                            // Check if it's not 50.0% (with small tolerance)
+                            if (Math.abs(value - 50.0) >= 0.1) {
+                                data.cell.styles.textColor = [217, 119, 6]; // Orange
                                 data.cell.styles.fontStyle = 'bold';
                             }
                         }
@@ -173,12 +167,9 @@ async function exportToPDF() {
                         const match = cellText.match(/([\d.]+)/);
                         if (match) {
                             const value = parseFloat(match[1]);
-                            // Check if it matches 1.750 (with small tolerance)
-                            if (Math.abs(value - 1.750) < 0.01) {
-                                data.cell.styles.textColor = [6, 95, 70]; // Green - correct value
-                                data.cell.styles.fontStyle = 'bold';
-                            } else {
-                                data.cell.styles.textColor = [153, 27, 27]; // Red - incorrect value
+                            // Check if it's not 1.750 (with small tolerance)
+                            if (Math.abs(value - 1.750) >= 0.01) {
+                                data.cell.styles.textColor = [217, 119, 6]; // Orange
                                 data.cell.styles.fontStyle = 'bold';
                             }
                         }
@@ -197,12 +188,9 @@ async function exportToPDF() {
                         const match = cellText.match(/([\d.]+)%/);
                         if (match) {
                             const value = parseFloat(match[1]);
-                            // Check if it matches 70.0% (with small tolerance)
-                            if (Math.abs(value - 70.0) < 0.1) {
-                                data.cell.styles.textColor = [6, 95, 70]; // Green - correct value
-                                data.cell.styles.fontStyle = 'bold';
-                            } else {
-                                data.cell.styles.textColor = [153, 27, 27]; // Red - incorrect value
+                            // Check if it's not 70.0% (with small tolerance)
+                            if (Math.abs(value - 70.0) >= 0.1) {
+                                data.cell.styles.textColor = [217, 119, 6]; // Orange
                                 data.cell.styles.fontStyle = 'bold';
                             }
                         }
@@ -221,12 +209,9 @@ async function exportToPDF() {
                         const match = cellText.match(/([\d.]+)%/);
                         if (match) {
                             const value = parseFloat(match[1]);
-                            // Check if it matches 10.0% (with small tolerance)
-                            if (Math.abs(value - 10.0) < 0.1) {
-                                data.cell.styles.textColor = [6, 95, 70]; // Green - correct value
-                                data.cell.styles.fontStyle = 'bold';
-                            } else {
-                                data.cell.styles.textColor = [153, 27, 27]; // Red - incorrect value
+                            // Check if it's not 10.0% (with small tolerance)
+                            if (Math.abs(value - 10.0) >= 0.1) {
+                                data.cell.styles.textColor = [217, 119, 6]; // Orange
                                 data.cell.styles.fontStyle = 'bold';
                             }
                         }
@@ -252,7 +237,7 @@ async function exportToPDF() {
         const now = new Date();
         const date = now.toISOString().slice(0, 10); // YYYY-MM-DD
         const time = now.toTimeString().slice(0, 8).replace(/:/g, '-'); // HH-MM-SS
-        const filename = `CostingValidation_${date}_${time}.pdf`;
+        const filename = `CostingValidation_${date}.pdf`;
 
         // Save the PDF
         doc.save(filename);
