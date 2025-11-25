@@ -1,8 +1,3 @@
-// Export functionality for Costing Validation results
-
-/**
- * Export the results table as a PDF
- */
 async function exportToPDF() {
     const table = document.getElementById('mainResultsTable');
 
